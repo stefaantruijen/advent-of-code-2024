@@ -20,5 +20,11 @@ public class ListDiffer {
         }
         return difference;
     }
-}
 
+    public static long listSimilarity(final List<Long> list, final List<Long> list2) {
+        return list.stream().map(leftLocation -> {
+            final long leftLocationInRightListCount = list2.stream().filter(rightLocation -> rightLocation.equals(leftLocation)).count();
+            return leftLocation * leftLocationInRightListCount;
+        }).reduce(0L, Long::sum);
+    }
+}

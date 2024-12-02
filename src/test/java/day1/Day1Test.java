@@ -34,8 +34,14 @@ public class Day1Test {
     }
 
     @Test
-    public void exampleTestCase() throws Exception {
+    public void exampleTestCasePart1() throws Exception {
         final List<List<Long>> locationLists = LocationListsReader.readLocationsFromString(testInput);
         assertThat(ListDiffer.listDifference(locationLists.get(0), locationLists.get(1))).isEqualTo(11L);
+    }
+
+    @Test
+    public void exampleTestCasePart2() throws Exception {
+        final List<List<Long>> locationLists = LocationListsReader.readLocationsFromString(testInput);
+        assertThat(ListDiffer.listSimilarity(locationLists.get(0), locationLists.get(1))).isEqualTo(31L);
     }
 }
