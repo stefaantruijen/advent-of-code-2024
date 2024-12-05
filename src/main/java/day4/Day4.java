@@ -12,7 +12,7 @@ public class Day4 {
 		return findHorizontalMatches(wordFinder) + findVerticalMatches(wordFinder) + findDiagonalMatches(wordFinder);
 	}
 
-	static int findHorizontalMatches(final char[][] wordFinder) {
+	private static int findHorizontalMatches(final char[][] wordFinder) {
 		int result = 0;
 		for (char[] row : wordFinder) {
 			result = getNumberOfXmassesInSingleRow(result, row);
@@ -20,7 +20,7 @@ public class Day4 {
 		return result;
 	}
 
-	static int findVerticalMatches(final char[][] wordFinder) {
+	private static int findVerticalMatches(final char[][] wordFinder) {
 		int result = 0;
 		for (int j = 0; j < wordFinder.length; j++) {
 			char[] col = new char[wordFinder.length];
@@ -56,7 +56,7 @@ public class Day4 {
 		return result;
 	}
 
-	static int findDiagonalMatches(final char[][] wordFinder) {
+	private static int findDiagonalMatches(final char[][] wordFinder) {
 		int result = 0;
 		final int colLength = wordFinder[0].length;
 		final int rowLength = wordFinder.length;
@@ -103,6 +103,37 @@ public class Day4 {
 	}
 
 
+	private static int findCrossMasses(final char[][] wordFinder) {
+		int result = 0;
+		final int colLength = wordFinder[0].length;
+		final int rowLength = wordFinder.length;
+		for (int rowIndex = 0; rowIndex < wordFinder.length; rowIndex++) {
+			for (int columnIndex = 0; columnIndex < rowLength; columnIndex++) {
+				char rowChar = wordFinder[rowIndex][columnIndex];
+				if (rowChar == 'A') {
+					// see if we have an A dead-center and enough space for a potential cross
+					if (rowIndex - 1 >= 0 && columnIndex - 1 >= 0 && rowIndex + 1 < rowLength && columnIndex + 1 < colLength) {
+						// check for M top left and S bottom right OR M bottom right and S top left
+						if ((wordFinder[rowIndex - 1][columnIndex - 1] == 'M'
+								&& wordFinder[rowIndex + 1][columnIndex + 1] == 'S')
+								|| (wordFinder[rowIndex - 1][columnIndex - 1] == 'S'
+								&& wordFinder[rowIndex + 1][columnIndex + 1] == 'M')) {
+							// check for M bottom left and S top right + M top right and S bottom left
+							if ((wordFinder[rowIndex + 1][columnIndex - 1] == 'M'
+									&& wordFinder[rowIndex - 1][columnIndex + 1] == 'S')
+									|| (wordFinder[rowIndex + 1][columnIndex - 1] == 'S'
+									&& wordFinder[rowIndex - 1][columnIndex + 1] == 'M')) {
+								result++;
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+
 	private static char[][] constructWordFinder(final Reader inputSource) {
 		char[][] wordfinder = null;
 		int i = 0;
@@ -121,6 +152,8 @@ public class Day4 {
 
 	public static void main(String[] args) {
 		final int xmasCount = xmasCountInWordFinder(new InputStreamReader(Day3.class.getClassLoader().getResourceAsStream("day-4-input.txt")));
+		final int x_masCount = findCrossMasses(constructWordFinder(new InputStreamReader(Day3.class.getClassLoader().getResourceAsStream("day-4-input.txt"))));
 		System.out.println("XMAS occurs " + xmasCount + " number of times in your wordfinder");
+		System.out.println("X-MAS occurs " + x_masCount + " number of times in your wordfinder");
 	}
 }
