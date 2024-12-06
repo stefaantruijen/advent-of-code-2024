@@ -1,5 +1,7 @@
 package day5;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateInstructionRule {
@@ -26,5 +28,15 @@ public class UpdateInstructionRule {
 			}
 		}
 		return true;
+	}
+
+	public List<Integer> fixBadRule(final List<Integer> updateInstruction) {
+		assert !isSatisfiedBy(updateInstruction);
+		final int indexOfViolatedSubject = updateInstruction.indexOf(subject);
+		final int indexOfViolatedConstraint = updateInstruction.indexOf(constraint);
+		List<Integer> result = new ArrayList<>(updateInstruction);
+		result.set(indexOfViolatedSubject, updateInstruction.get(indexOfViolatedConstraint));
+		result.set(indexOfViolatedConstraint, updateInstruction.get(indexOfViolatedSubject));
+		return result;
 	}
 }

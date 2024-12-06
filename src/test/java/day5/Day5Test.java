@@ -41,7 +41,8 @@ public class Day5Test {
 
 	@Test
 	public void testExample() {
-		assertThat(Day5.checksumOfCorrectInstructions(new StringReader(exampleInput))).isEqualTo(143);
+		final SleighInstructionSet sleighInstructionSet = Day5.parseInput(new StringReader(exampleInput));
+		assertThat(Day5.checksumOfCorrectInstructions(sleighInstructionSet)).isEqualTo(143);
 	}
 
 	@Test
@@ -57,4 +58,29 @@ public class Day5Test {
 		List<Integer> updateInstruction = List.of(75, 53, 61, 47, 29);
 		assertThat(rule.isSatisfiedBy(updateInstruction)).isFalse();
 	}
+
+	@Test
+	public void fixInvalidRule() {
+		final UpdateInstructionRule rule = new UpdateInstructionRule(97, 75);
+		List<Integer> updateInstruction = List.of(75,97,47,61,53);
+		assertThat(rule.isSatisfiedBy(updateInstruction)).isFalse();
+		assertThat(rule.fixBadRule(updateInstruction)).isEqualTo(List.of(97,75,47,61,53));
+		assertThat(rule.isSatisfiedBy(rule.fixBadRule(updateInstruction))).isTrue();
+	}
+
+	@Test
+	public void fixInvalidRule2() {
+		final UpdateInstructionRule rule = new UpdateInstructionRule(29, 13);
+		List<Integer> updateInstruction = List.of(61,13,29);
+		assertThat(rule.isSatisfiedBy(updateInstruction)).isFalse();
+		assertThat(rule.fixBadRule(updateInstruction)).isEqualTo(List.of(61,29,13));
+		assertThat(rule.isSatisfiedBy(rule.fixBadRule(updateInstruction))).isTrue();
+	}
+
+	@Test
+	public void testExamplePart2() {
+		final SleighInstructionSet sleighInstructionSet = Day5.parseInput(new StringReader(exampleInput));
+		assertThat(Day5.getChecksumOfFixedRules(sleighInstructionSet.updateInstructions(), sleighInstructionSet.rules())).isEqualTo(123);
+	}
+
 }
