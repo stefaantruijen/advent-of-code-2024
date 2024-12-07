@@ -1,5 +1,7 @@
 package day4;
 
+import static common.CharMatrixParser.constructMatrixFromReader;
+
 import day3.Day3;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -8,7 +10,7 @@ import java.util.Scanner;
 public class Day4 {
 
 	public static int xmasCountInWordFinder(final Reader inputSource) {
-		final char[][] wordFinder = constructWordFinder(inputSource);
+		final char[][] wordFinder = constructMatrixFromReader(inputSource);
 		return findHorizontalMatches(wordFinder) + findVerticalMatches(wordFinder) + findDiagonalMatches(wordFinder);
 	}
 
@@ -133,26 +135,9 @@ public class Day4 {
 		return result;
 	}
 
-
-	private static char[][] constructWordFinder(final Reader inputSource) {
-		char[][] wordfinder = null;
-		int i = 0;
-		try (final Scanner scanner = new Scanner(inputSource)) {
-			while (scanner.hasNextLine()) {
-				final String line = scanner.nextLine();
-				if (i == 0) {
-					// only support square input
-					wordfinder = new char[line.length()][line.length()];
-				}
-				wordfinder[i++] = line.toCharArray();
-			}
-		}
-		return wordfinder;
-	}
-
 	public static void main(String[] args) {
 		final int xmasCount = xmasCountInWordFinder(new InputStreamReader(Day3.class.getClassLoader().getResourceAsStream("day-4-input.txt")));
-		final int x_masCount = findCrossMasses(constructWordFinder(new InputStreamReader(Day3.class.getClassLoader().getResourceAsStream("day-4-input.txt"))));
+		final int x_masCount = findCrossMasses(constructMatrixFromReader(new InputStreamReader(Day3.class.getClassLoader().getResourceAsStream("day-4-input.txt"))));
 		System.out.println("XMAS occurs " + xmasCount + " number of times in your wordfinder");
 		System.out.println("X-MAS occurs " + x_masCount + " number of times in your wordfinder");
 	}
