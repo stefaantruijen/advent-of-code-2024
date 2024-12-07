@@ -60,7 +60,7 @@ public class Day6Test {
 	public void tickOnceFromStart() {
 		final var reader = new StringReader(exampleInput);
 		final char[][] parsedInput = constructMatrixFromReader(reader);
-		final char[][] labStateAfterTick = Day6.tick(parsedInput);
+		final char[][] labStateAfterTick = LabUtil.tick(parsedInput).labStateAfterTick();
 		assertThat(labStateToString(labStateAfterTick)).isEqualTo("""
 			....#.....
 			.........#
@@ -85,7 +85,7 @@ public class Day6Test {
 				""";
 		final var reader = new StringReader(input);
 		final char[][] parsedInput = constructMatrixFromReader(reader);
-		final char[][] labStateAfterTick = Day6.tick(parsedInput);
+		final char[][] labStateAfterTick = LabUtil.tick(parsedInput).labStateAfterTick();
 		assertThat(labStateToString(labStateAfterTick)).isEqualTo("""
 				.#.
 				.X>
@@ -102,7 +102,7 @@ public class Day6Test {
 				""";
 		final var reader = new StringReader(input);
 		final char[][] parsedInput = constructMatrixFromReader(reader);
-		final char[][] labStateAfterTick = Day6.tick(parsedInput);
+		final char[][] labStateAfterTick = LabUtil.tick(parsedInput).labStateAfterTick();
 		assertThat(labStateToString(labStateAfterTick)).isEqualTo("""
 				.#.
 				XX#
