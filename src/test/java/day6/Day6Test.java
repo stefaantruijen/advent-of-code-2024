@@ -1,6 +1,8 @@
 package day6;
 
 import static common.CharMatrixParser.constructMatrixFromReader;
+import static day6.Day6Part2.doesGuardLoop;
+import static day6.Day6Part2.numberOfWaysToMakeTheGuardLoop;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import java.io.StringReader;
@@ -50,6 +52,13 @@ public class Day6Test {
 		assertThat(Day6.numberOfVisitedPositions(parsedInput)).isEqualTo(41);
 	}
 
+	@Test
+	public void testExamplePart2() {
+		final var reader = new StringReader(exampleInput);
+		final char[][] parsedInput = constructMatrixFromReader(reader);
+		assertThat(Day6Part2.numberOfWaysToMakeTheGuardLoop(parsedInput)).isEqualTo(6);
+	}
+
 	// sanity check of expectedLabState matrix
 	@Test
 	public void sanityCheckLabStateRepresentation() {
@@ -62,17 +71,17 @@ public class Day6Test {
 		final char[][] parsedInput = constructMatrixFromReader(reader);
 		final char[][] labStateAfterTick = LabUtil.tick(parsedInput).labStateAfterTick();
 		assertThat(labStateToString(labStateAfterTick)).isEqualTo("""
-			....#.....
-			.........#
-			..........
-			..#.......
-			.......#..
-			....^.....
-			.#..X.....
-			........#.
-			#.........
-			......#...
-			""");
+				....#.....
+				.........#
+				..........
+				..#.......
+				.......#..
+				....^.....
+				.#..X.....
+				........#.
+				#.........
+				......#...
+				""");
 	}
 
 
@@ -108,6 +117,72 @@ public class Day6Test {
 				XX#
 				.v.
 				""");
+	}
+
+	@Test
+	public void tickWithStuckGuard() {
+		final String input = """
+				.#.
+				#^#
+				.#.
+				""";
+		final var reader = new StringReader(input);
+		final char[][] parsedInput = constructMatrixFromReader(reader);
+		final TickResult tick = LabUtil.tick(parsedInput);
+		assertThat(tick.guardMoved()).isFalse();
+		final char[][] labStateAfterTick = tick.labStateAfterTick();
+		assertThat(labStateToString(labStateAfterTick)).isEqualTo(input);
+	}
+
+	@Test
+	public void guardIsLooping() {
+		final String input = """
+				.#..
+				#^.#
+				#...
+				..#.
+				""";
+		final var reader = new StringReader(input);
+		final char[][] parsedInput = constructMatrixFromReader(reader);
+		assertThat(doesGuardLoop(parsedInput)).isTrue();
+	}
+
+	@Test
+	public void guardIsNotLooping() {
+		final String input = """
+				.#..
+				#^.#
+				#...
+				....
+				""";
+		final var reader = new StringReader(input);
+		final char[][] parsedInput = constructMatrixFromReader(reader);
+		assertThat(doesGuardLoop(parsedInput)).isFalse();
+	}
+
+	@Test
+	public void guardCanBeMadeToLoopInTwoWays() {
+		final String input = """
+				.#..
+				#^.#
+				#...
+				....
+				""";
+		/*
+		Loop 1:
+				.#..
+				#^.# // he loops on these two positions
+				#.#.
+				....
+		Loop 2:
+				.#..
+				#^.#  |he loops
+				#...  |on this square path
+				..#.
+		 */
+		final var reader = new StringReader(input);
+		final char[][] parsedInput = constructMatrixFromReader(reader);
+		assertThat(numberOfWaysToMakeTheGuardLoop(parsedInput)).isEqualTo(2);
 	}
 
 	private String labStateToString(char[][] labState) {

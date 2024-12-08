@@ -35,14 +35,15 @@ public class LabUtil {
 					while (isWithinBoundsOfLab(nextPosition.row(), nextPosition.col(), labState)
 							&& labState[nextPosition.row()][nextPosition.col()] == '#') {
 						// if guard is surrounded by obstacles, stop trying
-						if(guardLoopingCounter++ > 4) {
+						if (guardLoopingCounter++ >= 4) {
 							shouldContinue = false;
+							break;
 						}
 						guardRepresentation = rotateGuard(guardRepresentation);
 						nextPosition = determineNextPosition(i, j, guardRepresentation);
 					}
 					// assuming there is only one guard
-					if(shouldContinue) {
+					if (shouldContinue) {
 						final char[][] nextLabState = doMove(labState, nextPosition, previousPosition, guardRepresentation);
 						return new TickResult(nextLabState, true);
 					}
