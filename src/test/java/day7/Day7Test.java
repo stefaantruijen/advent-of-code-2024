@@ -1,6 +1,7 @@
 package day7;
 
 import static day7.Day7.sumOfLeftMemberOfEquationsThatAddUp;
+import static day7.Day7Part2.sumOfLeftMemberOfEquationsThatAddUpWithThirdOperator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.StringReader;
@@ -24,6 +25,11 @@ public class Day7Test {
     @Test
     public void testSampleCasePart1() {
         assertThat(sumOfLeftMemberOfEquationsThatAddUp(new StringReader(example1Input))).isEqualTo(3749);
+    }
+
+    @Test
+    public void testSampleCasePart2() {
+        assertThat(sumOfLeftMemberOfEquationsThatAddUpWithThirdOperator(new StringReader(example1Input))).isEqualTo(11387);
     }
 
 }
