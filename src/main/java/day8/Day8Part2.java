@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Day8 {
+public class Day8Part2 {
 
-	public static final String VALID_INPUTS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-	static int numberOfUniqueAntinodes(final Reader reader) {
+	static int numberOfUniqueAntinodesWithResonance(final Reader reader) {
 		final Set<Position> antinodePositions = new HashSet<>();
 		final char[][] map = constructMatrixFromReader(reader);
 		for (int i = 0; i < map.length; i++) {
@@ -25,21 +23,25 @@ public class Day8 {
 								int hammingDistanceRow = k - i;
 								int hammingDistanceCol = l - j;
 								final ArrayList<Position> potentialPositions = new ArrayList<>();
-								potentialPositions.add(new Position(i + hammingDistanceRow, j + hammingDistanceCol));
-								potentialPositions.add(new Position(i - hammingDistanceRow, j - hammingDistanceCol));
-								potentialPositions.add(new Position(k - hammingDistanceRow, l - hammingDistanceCol));
-								potentialPositions.add(new Position(k + hammingDistanceRow, l + hammingDistanceCol));
+								boolean addedPosition = true;
+								for(int counter = 1; counter < 10000; counter++) {
+									// add a bunch of positions that are definitely out of bounds
+									potentialPositions.add(new Position(i + hammingDistanceRow * counter, j + hammingDistanceCol * counter));
+									potentialPositions.add(new Position(i - hammingDistanceRow * counter, j - hammingDistanceCol * counter));
+									potentialPositions.add(new Position(k - hammingDistanceRow * counter, l - hammingDistanceCol * counter));
+									potentialPositions.add(new Position(k + hammingDistanceRow * counter, l + hammingDistanceCol * counter));
+								}
 								for (Position potentialPosition : potentialPositions) {
 									if (
 											potentialPosition.row() >= 0
 											&& potentialPosition.col() >= 0
 											&& potentialPosition.row() < map.length
 											&& potentialPosition.col() < map[0].length
-											&& potentialPosition.row() != i && potentialPosition.col() != j
-											&& potentialPosition.row() != k && potentialPosition.col() != l) {
+											/*&& (potentialPosition.row() != i && potentialPosition.col() != j)
+											&& (potentialPosition.row() != k && potentialPosition.col() != l)*/) {
 										boolean added = antinodePositions.add(potentialPosition);
 										if(added) {
-											System.out.println("added " + potentialPosition + " char there = " + map[potentialPosition.row()][potentialPosition.col()]);
+											System.out.println("added " + potentialPosition);
 										}
 									}
 								}
@@ -53,11 +55,11 @@ public class Day8 {
 	}
 
 	public static void main(final String[] args) {
-		final var reader = new InputStreamReader(Day8.class.getClassLoader().getResourceAsStream("day-8-input.txt"));
+		final var reader = new InputStreamReader(Day8Part2.class.getClassLoader().getResourceAsStream("day-8-input.txt"));
 		final long nanosBefore = System.nanoTime();
-		final int result = numberOfUniqueAntinodes(reader);
+		final int result = numberOfUniqueAntinodesWithResonance(reader);
 		final long nanosAfter = System.nanoTime();
 		final long millisElapsed = (nanosAfter - nanosBefore) / 1_000_000;
-		System.out.println("# unique locations within the bounds of the map contain an antinode = " + result + ". Took " + millisElapsed + "ms");
+		System.out.println("# unique locations within the bounds of the map contain an antinode with resonance = " + result + ". Took " + millisElapsed + "ms");
 	}
 }
