@@ -1,4 +1,4 @@
-package day6;
+package common;
 
 public record Position(int row, int col) {
 }

@@ -1,5 +1,6 @@
 package day6;
 
+import common.Position;
 import java.util.Arrays;
 import java.util.List;
 

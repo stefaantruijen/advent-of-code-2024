@@ -7,6 +7,7 @@ import static day6.LabUtil.labHasGuard;
 import static day6.LabUtil.tick;
 import static day6.LabUtil.visitAllGuardLocations;
 
+import common.Position;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
