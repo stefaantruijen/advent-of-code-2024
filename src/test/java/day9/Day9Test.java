@@ -1,6 +1,9 @@
 package day9;
 
 import static day9.Day9.calculateDiskChecksum;
+import static day9.Day9.compactFiles;
+import static day9.Day9.compactFiles2;
+import static day9.Day9.compactFilesChecksum;
 import static day9.Day9.createDiskState;
 import static day9.Day9.fragmentFilesForMaxContiguousFreeSpace;
 import static day9.Day9.fragmentedSystemChecksum;
@@ -22,6 +25,11 @@ public class Day9Test {
 	}
 
 	@Test
+	public void examplePart2() {
+		assertThat(compactFilesChecksum(exampleInput)).isEqualTo(2858L);
+	}
+
+	@Test
 	public void fragTest() {
 		final List<DiskBit> diskBits = createDiskState(exampleInput);
 		final List<DiskBit> expected = new ArrayList<>();
@@ -32,9 +40,39 @@ public class Day9Test {
 				expected.add(new DiskBit(Character.getNumericValue(c)));
 			}
 		}
-
 		assertThat(fragmentFilesForMaxContiguousFreeSpace(diskBits)).isEqualTo(expected);
 	}
+
+	@Test
+	public void compactTest() {
+		final List<DiskBit> diskBits = createDiskState(exampleInput);
+		final List<DiskBit> expected = new ArrayList<>();
+		for (final char c : "00992111777.44.333....5555.6666.....8888..".toCharArray()) {
+			if (c == '.') {
+				expected.add(DiskBit.FREE_BIT);
+			} else {
+				expected.add(new DiskBit(Character.getNumericValue(c)));
+			}
+		}
+		assertThat(compactFiles2(diskBits)).isEqualTo(expected);
+	}
+
+
+	@Test
+	public void simpleCompactTest() {
+		final String input = "0..111....2.333";
+		final List<DiskBit> diskBits = createDiskState("1234113");
+			final List<DiskBit> expected = new ArrayList<>();
+			for (final char c : "02.111333......".toCharArray()) {
+				if (c == '.') {
+					expected.add(DiskBit.FREE_BIT);
+				} else {
+					expected.add(new DiskBit(Character.getNumericValue(c)));
+				}
+			}
+			assertThat(compactFiles(diskBits)).isEqualTo(expected);
+	}
+
 
 	@Test
 	public void checksumExample() {
